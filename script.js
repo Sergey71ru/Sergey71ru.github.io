@@ -1,14 +1,11 @@
 function showError(message) {
-    // Создаем элемент для отображения ошибки
     const errorElement = document.createElement('div');
     errorElement.className = 'error-message';
     errorElement.textContent = message;
 
-    // Добавляем ошибку в контейнер
     const container = document.querySelector('.container');
     container.appendChild(errorElement);
 
-    // Удаляем ошибку через 5 секунд
     setTimeout(() => {
         errorElement.remove();
     }, 5000);
@@ -18,14 +15,13 @@ function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    // Проверяем, что все поля заполнены
     if (!email || !password) {
         showError('Пожалуйста, заполните все поля.');
         return;
     }
 
-    // Отправляем данные в бот
     const data = { email, password };
+    console.log("Данные для входа:", data);  // Логируем данные
     Telegram.WebApp.sendData(JSON.stringify(data));
     Telegram.WebApp.close();
 }
@@ -37,14 +33,13 @@ function register() {
     const password = document.getElementById('password').value;
     const position = document.getElementById('position').value;
 
-    // Проверяем, что все поля заполнены
     if (!firstName || !lastName || !email || !password || !position) {
         showError('Пожалуйста, заполните все поля.');
         return;
     }
 
-    // Отправляем данные в бот
     const data = { firstName, lastName, email, password, position };
+    console.log("Данные для регистрации:", data);  // Логируем данные
     Telegram.WebApp.sendData(JSON.stringify(data));
     Telegram.WebApp.close();
 }
@@ -54,6 +49,5 @@ function showRecovery() {
 }
 
 function closeWebApp() {
-    // Закрываем Web App и возвращаем пользователя в чат
     Telegram.WebApp.close();
 }
