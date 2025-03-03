@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Успешная авторизация</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            background-image: url('your-background-image.jpg');
+            background-size: cover;
+            color: white;
+        }
+        .container {
+            max-width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: center;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Добро пожаловать!</h2>
+        <p>Вы успешно авторизовались.</p>
+        <button onclick="closeWebApp()">Вернуться в чат</button>
+    </div>
+
+    <script>
+        function closeWebApp() {
+            // Закрываем Web App и возвращаем пользователя в чат
+            Telegram.WebApp.close();
+        }
+    </script>
+</body>
+</html>

