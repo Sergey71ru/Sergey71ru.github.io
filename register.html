@@ -4,62 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
-    <style>
-        body {
-            font-family: 'Times New Roman', serif;
-            background-image: url('your-background-image.jpg');
-            background-size: cover;
-            color: white;
-        }
-        .container {
-            max-width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: none;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h2>Регистрация</h2>
-        <input type="text" id="firstName" placeholder="Имя">
-        <input type="text" id="lastName" placeholder="Фамилия">
-        <input type="email" id="email" placeholder="Почта">
-        <input type="password" id="password" placeholder="Пароль">
-        <input type="text" id="position" placeholder="Должность">
+        <input type="text" id="firstName" placeholder="Имя" required>
+        <input type="text" id="lastName" placeholder="Фамилия" required>
+        <input type="email" id="email" placeholder="Почта" required>
+        <input type="password" id="password" placeholder="Пароль" required>
+        <input type="text" id="position" placeholder="Должность" required>
         <button onclick="register()">Зарегистрироваться</button>
     </div>
 
-    <script>
-        function register() {
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const position = document.getElementById('position').value;
-            const data = { firstName, lastName, email, password, position };
-
-            // Отправляем данные в бот
-            Telegram.WebApp.sendData(JSON.stringify(data));
-            Telegram.WebApp.close();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
