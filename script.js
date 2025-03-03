@@ -1,3 +1,5 @@
+console.log("Telegram.WebApp:", Telegram.WebApp);  // Проверяем, что объект доступен
+
 function showError(message) {
     const errorElement = document.createElement('div');
     errorElement.className = 'error-message';
@@ -22,7 +24,14 @@ function login() {
 
     const data = { email, password };
     console.log("Данные для входа:", data);  // Логируем данные
-    Telegram.WebApp.sendData(JSON.stringify(data));
+
+    if (Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        console.log("Данные отправлены в бота.");
+    } else {
+        console.error("Telegram.WebApp.sendData недоступен.");
+    }
+
     Telegram.WebApp.close();
 }
 
@@ -40,7 +49,14 @@ function register() {
 
     const data = { firstName, lastName, email, password, position };
     console.log("Данные для регистрации:", data);  // Логируем данные
-    Telegram.WebApp.sendData(JSON.stringify(data));
+
+    if (Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        console.log("Данные отправлены в бота.");
+    } else {
+        console.error("Telegram.WebApp.sendData недоступен.");
+    }
+
     Telegram.WebApp.close();
 }
 
