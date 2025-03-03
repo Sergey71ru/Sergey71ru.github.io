@@ -1,4 +1,18 @@
-console.log("Telegram.WebApp:", Telegram.WebApp);  // Проверяем, что объект доступен
+document.addEventListener("DOMContentLoaded", function() {
+    // Проверяем, что Telegram.WebApp доступен
+    if (window.Telegram && window.Telegram.WebApp) {
+        console.log("Telegram.WebApp инициализирован.");
+        console.log("Версия Telegram.WebApp:", Telegram.WebApp.version);
+
+        // Подтверждаем готовность страницы
+        Telegram.WebApp.ready();
+
+        // Логируем данные о пользователе (для отладки)
+        console.log("Пользователь:", Telegram.WebApp.initData);
+    } else {
+        console.error("Telegram.WebApp не инициализирован.");
+    }
+});
 
 function showError(message) {
     const errorElement = document.createElement('div');
