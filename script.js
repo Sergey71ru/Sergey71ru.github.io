@@ -1,16 +1,25 @@
+// Подключаем скрипт Telegram Web Apps
+const script = document.createElement('script');
+script.src = 'https://telegram.org/js/telegram-web-app.js';
+document.head.appendChild(script);
+
 document.addEventListener("DOMContentLoaded", function() {
-    // Ждем 1 секунду перед проверкой Telegram.WebApp
-    setTimeout(function() {
-        if (window.Telegram && window.Telegram.WebApp) {
-            console.log("Telegram.WebApp инициализирован.");
-            console.log("Версия Telegram.WebApp:", Telegram.WebApp.version);
-            console.log("Данные инициализации:", Telegram.WebApp.initData);  // Логируем данные инициализации
-            Telegram.WebApp.ready();  // Подтверждаем готовность страницы
-        } else {
-            console.error("Telegram.WebApp не инициализирован.");
-            console.log("Объект window:", window);  // Логируем объект window для отладки
+    if (window.Telegram && window.Telegram.WebApp) {
+        console.log("Telegram.WebApp инициализирован.");
+        console.log("Версия Telegram.WebApp:", Telegram.WebApp.version);
+        console.log("Данные инициализации:", Telegram.WebApp.initData);  // Логируем данные инициализации
+
+        // Разворачиваем Web Apps на весь экран (если поддерживается)
+        if (Telegram.WebApp.expand) {
+            Telegram.WebApp.expand();
         }
-    }, 1000);  // Задержка 1 секунда
+
+        // Подтверждаем готовность страницы
+        Telegram.WebApp.ready();
+    } else {
+        console.error("Telegram.WebApp не инициализирован.");
+        console.log("Объект window:", window);  // Логируем объект window для отладки
+    }
 });
 
 function showError(message) {
