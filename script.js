@@ -33,12 +33,10 @@ async function sendConfirmationCode() {
     const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbw7FxJ2waRJ5C0Vas7q--7p1gp7nRkKR529x72NFOaRf3kt4s38wcag77-DkIKj-8oSzg/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, code }),
+        const url = `https://script.google.com/macros/s/AKfycbw7FxJ2waRJ5C0Vas7q--7p1gp7nRkKR529x72NFOaRf3kt4s38wcag77-DkIKj-8oSzg/exec?email=${encodeURIComponent(email)}&code=${code}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            redirect: 'follow', // Разрешаем перенаправления
         });
 
         const result = await response.json();
@@ -56,7 +54,6 @@ async function sendConfirmationCode() {
         alert("Произошла ошибка при отправке кода. Проверьте консоль для подробностей.");
     }
 }
-
 // Переключение видимости пароля
 function togglePasswordVisibility(inputId) {
     const input = document.getElementById(inputId);
