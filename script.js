@@ -49,11 +49,11 @@ async function sendConfirmationCode() {
             emailError.style.display = "none";
             alert("Код подтверждения отправлен на вашу почту.");
         } else {
-            alert("Ошибка при отправке кода.");
+            alert("Ошибка при отправке кода: " + (result.message || "Неизвестная ошибка"));
         }
     } catch (error) {
         console.error("Ошибка при отправке запроса:", error);
-        alert("Произошла ошибка при отправке кода.", error);
+        alert("Произошла ошибка при отправке кода. Проверьте консоль для подробностей.");
     }
 }
 
