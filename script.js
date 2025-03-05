@@ -20,7 +20,7 @@ function validatePassword(password) {
 }
 
 // Отправка кода подтверждения
-function sendConfirmationCode() {
+async function sendConfirmationCode() {
     const email = document.getElementById('email').value;
     const emailError = document.getElementById('emailError');
 
@@ -30,10 +30,31 @@ function sendConfirmationCode() {
         return;
     }
 
-    // Временная заглушка: код 0000
-    document.getElementById('confirmationCode').value = "0000";
-    emailError.style.display = "none";
-    alert("Код подтверждения отправлен на вашу почту.");
+    const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
+
+    try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbw7FxJ2waRJ5C0Vas7q--7p1gp7nRkKR529x72NFOaRf3kt4s38wcag77-DkIKj-8oSzg/exec', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, code }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Сохраняем код для проверки
+            document.getElementById('confirmationCode').value = code;
+            emailError.style.display = "none";
+            alert("Код подтверждения отправлен на вашу почту.");
+        } else {
+            alert("Ошибка при отправке кода.");
+        }
+    } catch (error) {
+        console.error("Ошибка при отправке запроса:", error);
+        alert("Произошла ошибка при отправке кода.");
+    }
 }
 
 // Переключение видимости пароля
@@ -45,29 +66,6 @@ function togglePasswordVisibility(inputId) {
         input.type = "password";
     }
 }
-
-function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    if (!email || !password) {
-        showError('Пожалуйста, заполните все поля.');
-        return;
-    }
-
-    const data = { email, password };
-    console.log("Данные для входа:", data);  // Логируем данные
-
-    if (Telegram.WebApp && Telegram.WebApp.sendData) {
-        Telegram.WebApp.sendData(JSON.stringify(data));
-        console.log("Данные отправлены в бота.");
-    } else {
-        console.error("Telegram.WebApp.sendData недоступен.");
-    }
-
-    Telegram.WebApp.close();
-}
-
 
 // Регистрация
 function register() {
@@ -109,7 +107,7 @@ function register() {
     }
 
     // Проверка кода подтверждения
-    if (confirmationCode !== "0000") {
+    if (confirmationCode !== document.getElementById('confirmationCode').value) {
         alert("Неверный код подтверждения.");
         return;
     }
@@ -126,9 +124,4 @@ function register() {
     }
 
     Telegram.WebApp.close();
-}
-
-// Заглушка для "Забыли пароль"
-function showRecovery() {
-    alert("Сервис временно недоступен. Попробуйте позже.");
 }
