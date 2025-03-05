@@ -20,7 +20,7 @@ function validatePassword(password) {
 }
 
 // Отправка кода подтверждения
-async function sendConfirmationCode() {
+function sendConfirmationCode() {
     const email = document.getElementById('email').value;
     const emailError = document.getElementById('emailError');
 
@@ -32,31 +32,21 @@ async function sendConfirmationCode() {
 
     const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
 
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbw7FxJ2waRJ5C0Vas7q--7p1gp7nRkKR529x72NFOaRf3kt4s38wcag77-DkIKj-8oSzg/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, code }),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            // Сохраняем код для проверки
-            document.getElementById('confirmationCode').value = code;
-            emailError.style.display = "none";
-            alert("Код подтверждения отправлен на вашу почту.");
-        } else {
-            alert("Ошибка при отправке кода: " + (result.message || "Неизвестная ошибка"));
-        }
-    } catch (error) {
-        console.error("Ошибка при отправке запроса:", error);
-        alert("Произошла ошибка при отправке кода. Проверьте консоль для подробностей.");
-    }
+    const script = document.createElement('script');
+    script.src = `https://script.google.com/macros/s/ВАШ_ИДЕНТИФИКАТОР/exec?callback=handleResponse&email=${encodeURIComponent(email)}&code=${code}`;
+    document.body.appendChild(script);
 }
 
+function handleResponse(response) {
+    if (response.success) {
+        // Сохраняем код для проверки
+        document.getElementById('confirmationCode').value = code;
+        emailError.style.display = "none";
+        alert("Код подтверждения отправлен на вашу почту.");
+    } else {
+        alert("Ошибка при отправке кода: " + (response.message || "Неизвестная ошибка"));
+    }
+}
 // Переключение видимости пароля
 function togglePasswordVisibility(inputId) {
     const input = document.getElementById(inputId);
