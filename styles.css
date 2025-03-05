@@ -16,19 +16,24 @@ body {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     text-align: center;
+    width: 100%;  /* Добавляем ширину 100% */
 }
 
 input, select, button {
-    width: 100%;
+    width: 90%;  /* Уменьшаем ширину, чтобы элементы не прилипали к краям */
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px auto;  /* Центрируем элементы */
     border-radius: 5px;
     border: none;
+    display: block;  /* Делаем элементы блочными для центрирования */
 }
 
 .password-container {
     display: flex;
     align-items: center;
+    justify-content: center;  /* Центрируем контейнер пароля */
+    width: 90%;  /* Уменьшаем ширину */
+    margin: 10px auto;  /* Центрируем контейнер */
 }
 
 .password-container input {
@@ -54,6 +59,7 @@ input, select, button {
     margin-top: 5px;
     border: 1px solid #ff4444;
     font-size: 0.9em;
+    display: none;  /* Скрываем сообщения об ошибках по умолчанию */
 }
 
 a {

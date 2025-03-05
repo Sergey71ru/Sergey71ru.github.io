@@ -23,15 +23,17 @@ function validatePassword(password) {
 // Отправка кода подтверждения
 function sendConfirmationCode() {
     const email = document.getElementById('email').value;
+    const emailError = document.getElementById('emailError');
 
     if (!validateEmail(email)) {
-        document.getElementById('emailError').textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.style.display = "block";  // Показываем сообщение об ошибке
         return;
     }
 
     // Временная заглушка: код 0000
     document.getElementById('confirmationCode').value = "0000";
-    document.getElementById('emailError').textContent = "";
+    emailError.style.display = "none";  // Скрываем сообщение об ошибке
     alert("Код подтверждения отправлен на вашу почту.");
 }
 
@@ -56,25 +58,31 @@ function register() {
     const position = document.getElementById('position').value;
 
     // Очистка ошибок
-    document.getElementById('emailError').textContent = "";
-    document.getElementById('passwordError').textContent = "";
-    document.getElementById('confirmPasswordError').textContent = "";
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+    emailError.style.display = "none";
+    passwordError.style.display = "none";
+    confirmPasswordError.style.display = "none";
 
     // Валидация почты
     if (!validateEmail(email)) {
-        document.getElementById('emailError').textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.style.display = "block";  // Показываем сообщение об ошибке
         return;
     }
 
     // Валидация пароля
     if (!validatePassword(password)) {
-        document.getElementById('passwordError').textContent = "Пароль должен быть не менее 8 символов и содержать цифры и буквы.";
+        passwordError.textContent = "Пароль должен быть не менее 8 символов и содержать цифры и буквы.";
+        passwordError.style.display = "block";  // Показываем сообщение об ошибке
         return;
     }
 
     // Проверка совпадения паролей
     if (password !== confirmPassword) {
-        document.getElementById('confirmPasswordError').textContent = "Пароли не совпадают.";
+        confirmPasswordError.textContent = "Пароли не совпадают.";
+        confirmPasswordError.style.display = "block";  // Показываем сообщение об ошибке
         return;
     }
 
