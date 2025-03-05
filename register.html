@@ -9,22 +9,15 @@
 <body>
     <div class="container">
         <h2>Регистрация</h2>
-
         <input type="text" id="firstName" placeholder="Имя" required>
         <input type="text" id="lastName" placeholder="Фамилия" required>
-        <input type="text" id="position" placeholder="Должность" required>
-
         <input type="email" id="email" placeholder="Почта" required>
-        <button onclick="sendCode()">Выслать код</button>
-        <input type="text" id="emailCode" placeholder="Код из письма" required>
-
         <input type="password" id="password" placeholder="Пароль" required>
-        <input type="password" id="confirmPassword" placeholder="Повторите пароль" required>
-
+        <input type="text" id="position" placeholder="Должность" required>
         <button onclick="register()">Зарегистрироваться</button>
-        <p><a href="index.html">Уже есть аккаунт? Войти</a></p>
+        <p><a href="index.html">Назад</a></p>
     </div>
+    <script src="script.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="register.js"></script>
 </body>
 </html>
