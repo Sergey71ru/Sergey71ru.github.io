@@ -219,7 +219,6 @@ function login() {
 // Регистрация
 function register() {
     const email = document.getElementById('email').value;
-    const confirmationCode = document.getElementById('confirmationCode').value;
 
     // Проверка кода подтверждения
     if (confirmationCode !== document.getElementById('confirmationCode').value) {
