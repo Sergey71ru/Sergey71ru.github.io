@@ -22,19 +22,19 @@
 
         <!-- Подтверждение почты -->
         <input type="text" id="confirmationCode" placeholder="Код подтверждения" required>
-        <button onclick="sendConfirmationCode()">Выслать код</button>
+        <button class="animated-button" onclick="sendConfirmationCode()">Выслать код</button>
 
         <!-- Пароль -->
         <div class="password-container">
             <input type="password" id="password" placeholder="Пароль" required>
-            <button onclick="togglePasswordVisibility('password')">👁️</button>
+            <button class="animated-button" onclick="togglePasswordVisibility('password')">👁️</button>
         </div>
         <div id="passwordError" class="error-message"></div>
 
         <!-- Повторить пароль -->
         <div class="password-container">
             <input type="password" id="confirmPassword" placeholder="Повторите пароль" required>
-            <button onclick="togglePasswordVisibility('confirmPassword')">👁️</button>
+            <button class="animated-button" onclick="togglePasswordVisibility('confirmPassword')">👁️</button>
         </div>
         <div id="confirmPasswordError" class="error-message"></div>
 
@@ -47,12 +47,12 @@
         </select>
 
         <!-- Кнопка регистрации -->
-        <button onclick="register()">Зарегистрироваться</button>
+        <button class="animated-button" onclick="register()">Зарегистрироваться</button>
 
         <!-- Кнопка "Назад" -->
         <p><a href="index.html">Назад</a></p>
     </div>
-
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

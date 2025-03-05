@@ -15,7 +15,6 @@ function validateEmail(email) {
 
 // Валидация пароля
 function validatePassword(password) {
-    // Пароль должен быть не менее 8 символов и содержать цифры и буквы
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return regex.test(password);
 }
@@ -27,13 +26,13 @@ function sendConfirmationCode() {
 
     if (!validateEmail(email)) {
         emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
-        emailError.style.display = "block";  // Показываем сообщение об ошибке
+        emailError.style.display = "block";
         return;
     }
 
     // Временная заглушка: код 0000
     document.getElementById('confirmationCode').value = "0000";
-    emailError.style.display = "none";  // Скрываем сообщение об ошибке
+    emailError.style.display = "none";
     alert("Код подтверждения отправлен на вашу почту.");
 }
 
@@ -68,21 +67,21 @@ function register() {
     // Валидация почты
     if (!validateEmail(email)) {
         emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
-        emailError.style.display = "block";  // Показываем сообщение об ошибке
+        emailError.style.display = "block";
         return;
     }
 
     // Валидация пароля
     if (!validatePassword(password)) {
         passwordError.textContent = "Пароль должен быть не менее 8 символов и содержать цифры и буквы.";
-        passwordError.style.display = "block";  // Показываем сообщение об ошибке
+        passwordError.style.display = "block";
         return;
     }
 
     // Проверка совпадения паролей
     if (password !== confirmPassword) {
         confirmPasswordError.textContent = "Пароли не совпадают.";
-        confirmPasswordError.style.display = "block";  // Показываем сообщение об ошибке
+        confirmPasswordError.style.display = "block";
         return;
     }
 
@@ -104,4 +103,9 @@ function register() {
     }
 
     Telegram.WebApp.close();
+}
+
+// Заглушка для "Забыли пароль"
+function showRecovery() {
+    alert("Сервис временно недоступен. Попробуйте позже.");
 }
