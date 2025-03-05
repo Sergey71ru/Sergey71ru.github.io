@@ -46,6 +46,29 @@ function togglePasswordVisibility(inputId) {
     }
 }
 
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+        showError('Пожалуйста, заполните все поля.');
+        return;
+    }
+
+    const data = { email, password };
+    console.log("Данные для входа:", data);  // Логируем данные
+
+    if (Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        console.log("Данные отправлены в бота.");
+    } else {
+        console.error("Telegram.WebApp.sendData недоступен.");
+    }
+
+    Telegram.WebApp.close();
+}
+
+
 // Регистрация
 function register() {
     const firstName = document.getElementById('firstName').value;
