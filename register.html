@@ -10,21 +10,49 @@
     <div class="container">
         <h2>Регистрация</h2>
 
+        <!-- Имя -->
         <input type="text" id="firstName" placeholder="Имя" required>
+
+        <!-- Фамилия -->
         <input type="text" id="lastName" placeholder="Фамилия" required>
-        <input type="text" id="position" placeholder="Должность" required>
 
+        <!-- Почта -->
         <input type="email" id="email" placeholder="Почта" required>
-        <button onclick="sendCode()">Выслать код</button>
-        <input type="text" id="emailCode" placeholder="Код из письма" required>
+        <div id="emailError" class="error-message"></div>
 
-        <input type="password" id="password" placeholder="Пароль" required>
-        <input type="password" id="confirmPassword" placeholder="Повторите пароль" required>
+        <!-- Подтверждение почты -->
+        <input type="text" id="confirmationCode" placeholder="Код подтверждения" required>
+        <button onclick="sendConfirmationCode()">Выслать код</button>
 
+        <!-- Пароль -->
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button onclick="togglePasswordVisibility('password')">👁️</button>
+        </div>
+        <div id="passwordError" class="error-message"></div>
+
+        <!-- Повторить пароль -->
+        <div class="password-container">
+            <input type="password" id="confirmPassword" placeholder="Повторите пароль" required>
+            <button onclick="togglePasswordVisibility('confirmPassword')">👁️</button>
+        </div>
+        <div id="confirmPasswordError" class="error-message"></div>
+
+        <!-- Должность -->
+        <select id="position" required>
+            <option value="" disabled selected>Выберите должность</option>
+            <option value="Строитель">Строитель</option>
+            <option value="Инженер">Инженер</option>
+            <option value="Big Boss">Big Boss</option>
+        </select>
+
+        <!-- Кнопка регистрации -->
         <button onclick="register()">Зарегистрироваться</button>
-        <p><a href="index.html">Уже есть аккаунт? Войти</a></p>
+
+        <!-- Кнопка "Назад" -->
+        <p><a href="index.html">Назад</a></p>
     </div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="register.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
