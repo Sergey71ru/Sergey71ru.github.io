@@ -1,67 +1,92 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Ждем 1 секунду перед проверкой Telegram.WebApp
-    setTimeout(function() {
-        if (window.Telegram && window.Telegram.WebApp) {
-            console.log("Telegram.WebApp инициализирован.");
-            console.log("Версия Telegram.WebApp:", Telegram.WebApp.version);
-            console.log("Данные инициализации:", Telegram.WebApp.initData);  // Логируем данные инициализации
-            Telegram.WebApp.ready();  // Подтверждаем готовность страницы
-        } else {
-            console.error("Telegram.WebApp не инициализирован.");
-            console.log("Объект window:", window);  // Логируем объект window для отладки
-        }
-    }, 1000);  // Задержка 1 секунда
+    if (window.Telegram && window.Telegram.WebApp) {
+        console.log("Telegram.WebApp инициализирован.");
+        Telegram.WebApp.ready();
+    } else {
+        console.error("Telegram.WebApp не инициализирован.");
+    }
 });
 
-function showError(message) {
-    const errorElement = document.createElement('div');
-    errorElement.className = 'error-message';
-    errorElement.textContent = message;
-
-    const container = document.querySelector('.container');
-    container.appendChild(errorElement);
-
-    setTimeout(() => {
-        errorElement.remove();
-    }, 5000);
+// Валидация почты
+function validateEmail(email) {
+    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru)$/;
+    return regex.test(email);
 }
 
-function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+// Валидация пароля
+function validatePassword(password) {
+    // Пароль должен быть не менее 8 символов и содержать цифры и буквы
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return regex.test(password);
+}
 
-    if (!email || !password) {
-        showError('Пожалуйста, заполните все поля.');
+// Отправка кода подтверждения
+function sendConfirmationCode() {
+    const email = document.getElementById('email').value;
+
+    if (!validateEmail(email)) {
+        document.getElementById('emailError').textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
         return;
     }
 
-    const data = { email, password };
-    console.log("Данные для входа:", data);  // Логируем данные
-
-    if (Telegram.WebApp && Telegram.WebApp.sendData) {
-        Telegram.WebApp.sendData(JSON.stringify(data));
-        console.log("Данные отправлены в бота.");
-    } else {
-        console.error("Telegram.WebApp.sendData недоступен.");
-    }
-
-    Telegram.WebApp.close();
+    // Временная заглушка: код 0000
+    document.getElementById('confirmationCode').value = "0000";
+    document.getElementById('emailError').textContent = "";
+    alert("Код подтверждения отправлен на вашу почту.");
 }
 
+// Переключение видимости пароля
+function togglePasswordVisibility(inputId) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+}
+
+// Регистрация
 function register() {
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const confirmationCode = document.getElementById('confirmationCode').value;
     const position = document.getElementById('position').value;
 
-    if (!firstName || !lastName || !email || !password || !position) {
-        showError('Пожалуйста, заполните все поля.');
+    // Очистка ошибок
+    document.getElementById('emailError').textContent = "";
+    document.getElementById('passwordError').textContent = "";
+    document.getElementById('confirmPasswordError').textContent = "";
+
+    // Валидация почты
+    if (!validateEmail(email)) {
+        document.getElementById('emailError').textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
         return;
     }
 
+    // Валидация пароля
+    if (!validatePassword(password)) {
+        document.getElementById('passwordError').textContent = "Пароль должен быть не менее 8 символов и содержать цифры и буквы.";
+        return;
+    }
+
+    // Проверка совпадения паролей
+    if (password !== confirmPassword) {
+        document.getElementById('confirmPasswordError').textContent = "Пароли не совпадают.";
+        return;
+    }
+
+    // Проверка кода подтверждения
+    if (confirmationCode !== "0000") {
+        alert("Неверный код подтверждения.");
+        return;
+    }
+
+    // Все проверки пройдены, отправляем данные
     const data = { firstName, lastName, email, password, position };
-    console.log("Данные для регистрации:", data);  // Логируем данные
+    console.log("Данные для регистрации:", data);
 
     if (Telegram.WebApp && Telegram.WebApp.sendData) {
         Telegram.WebApp.sendData(JSON.stringify(data));
@@ -70,13 +95,5 @@ function register() {
         console.error("Telegram.WebApp.sendData недоступен.");
     }
 
-    Telegram.WebApp.close();
-}
-
-function showRecovery() {
-    alert('Сервис временно недоступен. Попробуйте позже.');
-}
-
-function closeWebApp() {
     Telegram.WebApp.close();
 }
