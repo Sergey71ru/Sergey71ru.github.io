@@ -30,23 +30,12 @@ function sendConfirmationCode() {
         return;
     }
 
-    const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
-
-    const script = document.createElement('script');
-    script.src = `https://script.google.com/macros/s/ВАШ_ИДЕНТИФИКАТОР/exec?callback=handleResponse&email=${encodeURIComponent(email)}&code=${code}`;
-    document.body.appendChild(script);
+    // Временная заглушка: код 0000
+    document.getElementById('confirmationCode').value = "0000";
+    emailError.style.display = "none";
+    alert("Код подтверждения отправлен на вашу почту.");
 }
 
-function handleResponse(response) {
-    if (response.success) {
-        // Сохраняем код для проверки
-        document.getElementById('confirmationCode').value = code;
-        emailError.style.display = "none";
-        alert("Код подтверждения отправлен на вашу почту.");
-    } else {
-        alert("Ошибка при отправке кода: " + (response.message || "Неизвестная ошибка"));
-    }
-}
 // Переключение видимости пароля
 function togglePasswordVisibility(inputId) {
     const input = document.getElementById(inputId);
@@ -56,6 +45,29 @@ function togglePasswordVisibility(inputId) {
         input.type = "password";
     }
 }
+
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+        showError('Пожалуйста, заполните все поля.');
+        return;
+    }
+
+    const data = { email, password };
+    console.log("Данные для входа:", data);  // Логируем данные
+
+    if (Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        console.log("Данные отправлены в бота.");
+    } else {
+        console.error("Telegram.WebApp.sendData недоступен.");
+    }
+
+    Telegram.WebApp.close();
+}
+
 
 // Регистрация
 function register() {
@@ -97,7 +109,7 @@ function register() {
     }
 
     // Проверка кода подтверждения
-    if (confirmationCode !== document.getElementById('confirmationCode').value) {
+    if (confirmationCode !== "0000") {
         alert("Неверный код подтверждения.");
         return;
     }
@@ -114,4 +126,9 @@ function register() {
     }
 
     Telegram.WebApp.close();
+}
+
+// Заглушка для "Забыли пароль"
+function showRecovery() {
+    alert("Сервис временно недоступен. Попробуйте позже.");
 }
