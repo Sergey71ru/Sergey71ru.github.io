@@ -53,7 +53,7 @@ async function sendConfirmationCode() {
         }
     } catch (error) {
         console.error("Ошибка при отправке запроса:", error);
-        alert("Произошла ошибка при отправке кода.");
+        alert("Произошла ошибка при отправке кода.", error);
     }
 }
 
