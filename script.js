@@ -7,18 +7,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-PUBLIC_KEY = "LBRlpbKBcDeugYBIC";
-SERVICE_ID = "service_5ufba1i";
-TEMPLATE_ID = "template_uclulfi";
+const PUBLIC_KEY = "LBRlpbKBcDeugYBIC";
+const SERVICE_ID = "service_5ufba1i";
+const TEMPLATE_ID = "template_uclulfi";
 
 emailjs.init(PUBLIC_KEY);
 
-let sentCode = null; // Переменная для хранения отправленного кода
-let codeSent = false; // Флаг, указывающий, что код был отправлен
-
 // Валидация почты
 function validateEmail(email) {
-    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru)$/;
+    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru|yahoo\.com)$/;
     return regex.test(email);
 }
 
@@ -33,25 +30,22 @@ async function sendConfirmationCode() {
     const email = document.getElementById('email').value;
     const emailError = document.getElementById('emailError');
 
-    // Валидация почты
     if (!validateEmail(email)) {
-        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex, Mail.ru или Yahoo.";
         emailError.style.display = "block";
         return;
     }
 
-    // Генерация 6-значного кода
-    sentCode = Math.floor(100000 + Math.random() * 900000);
-    codeSent = true; // Устанавливаем флаг, что код был отправлен
+    const code = Math.floor(100000 + Math.random() * 900000);
 
     try {
-        // Отправка письма через EmailJS
         const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
             to_email: email,
-            code: sentCode,
+            code: code,
         });
 
         if (response.status === 200) {
+            localStorage.setItem('confirmationCode', code); // Сохраняем код в localStorage
             emailError.style.display = "none";
             alert("Код подтверждения отправлен на вашу почту.");
         } else {
@@ -80,60 +74,44 @@ function register() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    const enteredCode = document.getElementById('confirmationCode').value;
+    const confirmationCode = document.getElementById('confirmationCode').value;
     const position = document.getElementById('position').value;
 
-    // Очистка ошибок
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
     const confirmPasswordError = document.getElementById('confirmPasswordError');
-    const codeError = document.getElementById('codeError');
+    const confirmationCodeError = document.getElementById('confirmationCodeError');
+
     emailError.style.display = "none";
     passwordError.style.display = "none";
     confirmPasswordError.style.display = "none";
-    codeError.style.display = "none";
+    confirmationCodeError.style.display = "none";
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !enteredCode || !position) {
-        alert("Пожалуйста, заполните все поля.");
-        return;
-    }
-
-    // Валидация почты
     if (!validateEmail(email)) {
-        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex, Mail.ru или Yahoo.";
         emailError.style.display = "block";
         return;
     }
 
-    // Валидация пароля
     if (!validatePassword(password)) {
         passwordError.textContent = "Пароль должен быть не менее 8 символов и содержать цифры и буквы.";
         passwordError.style.display = "block";
         return;
     }
 
-    // Проверка совпадения паролей
     if (password !== confirmPassword) {
         confirmPasswordError.textContent = "Пароли не совпадают.";
         confirmPasswordError.style.display = "block";
         return;
     }
 
-    // Проверка, что код был отправлен
-    if (!codeSent) {
-        codeError.textContent = "Сначала отправьте код подтверждения.";
-        codeError.style.display = "block";
+    const savedCode = localStorage.getItem('confirmationCode');
+    if (confirmationCode !== savedCode) {
+        confirmationCodeError.textContent = "Неверный код подтверждения.";
+        confirmationCodeError.style.display = "block";
         return;
     }
 
-    // Проверка кода подтверждения
-    if (enteredCode !== sentCode.toString()) {
-        codeError.textContent = "Неверный код подтверждения.";
-        codeError.style.display = "block";
-        return;
-    }
-
-    // Все проверки пройдены, отправляем данные
     const data = { firstName, lastName, email, password, position };
     console.log("Данные для регистрации:", data);
 
