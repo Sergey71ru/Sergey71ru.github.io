@@ -148,7 +148,92 @@ function register() {
     alert("Регистрация успешна!");
 }
 
-// Заглушка для "Забыли пароль"
-function showRecovery() {
-    alert("Сервис временно недоступен. Попробуйте позже.");
+// Отправка кода восстановления
+async function sendRecoveryCode() {
+    const email = document.getElementById('recoveryEmail').value;
+    const emailError = document.getElementById('emailError');
+
+    if (!validateEmail(email)) {
+        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.style.display = "block";
+        return;
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
+
+    try {
+        const response = await emailjs.send('service_5ufba1i', 'template_uclulfi', {
+            to_email: email,
+            code: code,
+        });
+
+        if (response.status === 200) {
+            // Сохраняем код в localStorage для проверки
+            localStorage.setItem('recoveryCode', code);
+            emailError.style.display = "none";
+            alert("Код восстановления отправлен на вашу почту.");
+        } else {
+            alert("Ошибка при отправке кода.");
+        }
+    } catch (error) {
+        console.error("Ошибка при отправке письма:", error);
+        alert("Произошла ошибка при отправке кода. Проверьте консоль для подробностей.");
+    }
+}
+
+// Сохранение нового пароля
+async function saveNewPassword() {
+    const email = document.getElementById('recoveryEmail').value;
+    const code = document.getElementById('recoveryCode').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+    const newPasswordError = document.getElementById('newPasswordError');
+    const confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+
+    // Проверка на заполнение всех полей
+    if (!email || !code || !newPassword || !confirmNewPassword) {
+        showError('Пожалуйста, заполните все поля.');
+        return;
+    }
+
+    // Проверка валидности почты
+    if (!validateEmail(email)) {
+        showError('Некорректная почта. Используйте Gmail, Yandex или Mail.ru.');
+        return;
+    }
+
+    // Проверка сложности пароля
+    if (!validatePassword(newPassword)) {
+        newPasswordError.textContent = 'Пароль должен быть не менее 8 символов и содержать цифры и буквы.';
+        newPasswordError.style.display = "block";
+        return;
+    }
+
+    // Проверка совпадения паролей
+    if (newPassword !== confirmNewPassword) {
+        confirmNewPasswordError.textContent = 'Пароли не совпадают.';
+        confirmNewPasswordError.style.display = "block";
+        return;
+    }
+
+    // Проверка кода подтверждения
+    const savedCode = localStorage.getItem('recoveryCode');
+    if (code !== savedCode) {
+        showError('Неверный код подтверждения.');
+        return;
+    }
+
+    // Все проверки пройдены, отправляем данные
+    const data = { email, newPassword };
+    console.log("Данные для восстановления пароля:", data);
+
+    if (Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        console.log("Данные отправлены в бота.");
+    } else {
+        console.error("Telegram.WebApp.sendData недоступен.");
+    }
+
+    Telegram.WebApp.close();
+    alert("Пароль успешно изменен! Теперь вы можете войти с новым паролем.");
 }
