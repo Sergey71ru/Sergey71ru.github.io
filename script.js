@@ -171,7 +171,7 @@ async function sendConfirmationCode() {
 
         if (response.status === 200) {
             // Сохраняем код для проверки
-            document.getElementById('confirmationCode').value = code;
+            //document.getElementById('confirmationCode').value = code;
             emailError.style.display = "none";
             alert("Код подтверждения отправлен на вашу почту.");
         } else {
@@ -219,7 +219,7 @@ function login() {
 // Регистрация
 function register() {
     const email = document.getElementById('email').value;
-
+    const confirmationCode = document.getElementById('confirmationCode').value;
     // Проверка кода подтверждения
     if (confirmationCode !== document.getElementById('confirmationCode').value) {
         alert("Неверный код подтверждения.");
