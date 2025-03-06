@@ -7,9 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-emailjs.init('LBRlpbKBcDeugYBIC');
+PUBLIC_KEY = "LBRlpbKBcDeugYBIC";
+SERVICE_ID = "service_5ufba1i";
+TEMPLATE_ID = "template_uclulfi";
 
-let savedConfirmationCode = null; // Глобальная переменная для хранения кода
+emailjs.init(PUBLIC_KEY);
 
 // Валидация почты
 function validateEmail(email) {
@@ -28,21 +30,26 @@ async function sendConfirmationCode() {
     const email = document.getElementById('email').value;
     const emailError = document.getElementById('emailError');
 
+    // Валидация почты
     if (!validateEmail(email)) {
         emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
         emailError.style.display = "block";
         return;
     }
 
-    savedConfirmationCode = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
+    // Генерация 6-значного кода
+    const code = Math.floor(100000 + Math.random() * 900000);
 
     try {
-        const response = await emailjs.send('service_5ufba1i', 'template_uclulfi', {
+        // Отправка письма через EmailJS
+        const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
             to_email: email,
-            code: savedConfirmationCode,
+            code: code,
         });
 
         if (response.status === 200) {
+            // Сохраняем код для проверки
+            document.getElementById('confirmationCode').value = code;
             emailError.style.display = "none";
             alert("Код подтверждения отправлен на вашу почту.");
         } else {
@@ -53,7 +60,6 @@ async function sendConfirmationCode() {
         alert("Произошла ошибка при отправке кода. Проверьте консоль для подробностей.");
     }
 }
-
 // Переключение видимости пароля
 function togglePasswordVisibility(inputId) {
     const input = document.getElementById(inputId);
@@ -82,12 +88,6 @@ function register() {
     passwordError.style.display = "none";
     confirmPasswordError.style.display = "none";
 
-    // Проверка заполнения всех полей
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !confirmationCode || !position) {
-        alert("Пожалуйста, заполните все поля.");
-        return;
-    }
-
     // Валидация почты
     if (!validateEmail(email)) {
         emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
@@ -109,15 +109,11 @@ function register() {
         return;
     }
 
-    // Проверка кода подтверждения
-    if (confirmationCode !== savedConfirmationCode) {
-        alert("Неверный код подтверждения.");
-        return;
-    }
+    const enteredCode = document.getElementById('confirmationCode').value;
+    const expectedCode = document.getElementById('confirmationCode').value;
 
-    // Проверка выбора должности
-    if (position === "") {
-        alert("Пожалуйста, выберите должность.");
+    if (enteredCode !== expectedCode) {
+        alert("Неверный код подтверждения.");
         return;
     }
 
