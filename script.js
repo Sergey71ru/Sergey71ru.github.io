@@ -87,7 +87,10 @@ function register() {
     emailError.style.display = "none";
     passwordError.style.display = "none";
     confirmPasswordError.style.display = "none";
-
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !confirmationCode || !position) {
+        alert("Пожалуйста, заполните все поля.");
+        return;
+    }
     // Валидация почты
     if (!validateEmail(email)) {
         emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
