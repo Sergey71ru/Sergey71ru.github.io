@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function() {
     if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram.WebApp инициализирован.");
@@ -42,8 +41,8 @@ async function sendConfirmationCode() {
         });
 
         if (response.status === 200) {
-            // Сохраняем код для проверки
-//            document.getElementById('confirmationCode').value = code;
+            // Сохраняем код в localStorage для проверки
+            localStorage.setItem('confirmationCode', code);
             emailError.style.display = "none";
             alert("Код подтверждения отправлен на вашу почту.");
         } else {
@@ -65,6 +64,12 @@ function togglePasswordVisibility(inputId) {
     }
 }
 
+// Функция для отображения ошибки
+function showError(message) {
+    alert(message);
+}
+
+// Вход
 function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -87,24 +92,62 @@ function login() {
     Telegram.WebApp.close();
 }
 
-
 // Регистрация
 function register() {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
     const email = document.getElementById('email').value;
-
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
     const confirmationCode = document.getElementById('confirmationCode').value;
+    const position = document.getElementById('position').value;
+
+    // Проверка на заполнение всех полей
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !confirmationCode || !position) {
+        showError('Пожалуйста, заполните все поля.');
+        return;
+    }
+
+    // Проверка валидности почты
+    if (!validateEmail(email)) {
+        showError('Некорректная почта. Используйте Gmail, Yandex или Mail.ru.');
+        return;
+    }
+
+    // Проверка сложности пароля
+    if (!validatePassword(password)) {
+        showError('Пароль должен быть не менее 8 символов и содержать цифры и буквы.');
+        return;
+    }
+
+    // Проверка совпадения паролей
+    if (password !== confirmPassword) {
+        showError('Пароли не совпадают.');
+        return;
+    }
+
     // Проверка кода подтверждения
-    if (confirmationCode !== document.getElementById('confirmationCode').value) {
-        alert("Неверный код подтверждения.");
+    const savedCode = localStorage.getItem('confirmationCode');
+    if (confirmationCode !== savedCode) {
+        showError('Неверный код подтверждения.');
         return;
     }
 
     // Все проверки пройдены, отправляем данные
-    const data = { email };
+    const data = { firstName, lastName, email, password, position };
     console.log("Данные для регистрации:", data);
 
+    if (Telegram.WebApp && Telegram.WebApp.sendData) {
+        Telegram.WebApp.sendData(JSON.stringify(data));
+        console.log("Данные отправлены в бота.");
+    } else {
+        console.error("Telegram.WebApp.sendData недоступен.");
+    }
+
+    Telegram.WebApp.close();
     alert("Регистрация успешна!");
 }
+
 // Заглушка для "Забыли пароль"
 function showRecovery() {
     alert("Сервис временно недоступен. Попробуйте позже.");
