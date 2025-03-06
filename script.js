@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function() {
     if (window.Telegram && window.Telegram.WebApp) {
         console.log("Telegram.WebApp инициализирован.");
@@ -7,15 +8,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-const PUBLIC_KEY = "LBRlpbKBcDeugYBIC";
-const SERVICE_ID = "service_5ufba1i";
-const TEMPLATE_ID = "template_uclulfi";
-
-emailjs.init(PUBLIC_KEY);
+emailjs.init('LBRlpbKBcDeugYBIC');
 
 // Валидация почты
 function validateEmail(email) {
-    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru|yahoo\.com)$/;
+    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru)$/;
     return regex.test(email);
 }
 
@@ -31,21 +28,22 @@ async function sendConfirmationCode() {
     const emailError = document.getElementById('emailError');
 
     if (!validateEmail(email)) {
-        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex, Mail.ru или Yahoo.";
+        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
         emailError.style.display = "block";
         return;
     }
 
-    const code = Math.floor(100000 + Math.random() * 900000);
+    const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
 
     try {
-        const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+        const response = await emailjs.send('service_5ufba1i', 'template_uclulfi', {
             to_email: email,
             code: code,
         });
 
         if (response.status === 200) {
-            localStorage.setItem('confirmationCode', code); // Сохраняем код в localStorage
+            // Сохраняем код для проверки
+//            document.getElementById('confirmationCode').value = code;
             emailError.style.display = "none";
             alert("Код подтверждения отправлен на вашу почту.");
         } else {
@@ -67,53 +65,17 @@ function togglePasswordVisibility(inputId) {
     }
 }
 
-// Регистрация
-function register() {
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
+function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const confirmationCode = document.getElementById('confirmationCode').value;
-    const position = document.getElementById('position').value;
 
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
-    const confirmPasswordError = document.getElementById('confirmPasswordError');
-    const confirmationCodeError = document.getElementById('confirmationCodeError');
-
-    emailError.style.display = "none";
-    passwordError.style.display = "none";
-    confirmPasswordError.style.display = "none";
-    confirmationCodeError.style.display = "none";
-
-    if (!validateEmail(email)) {
-        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex, Mail.ru или Yahoo.";
-        emailError.style.display = "block";
+    if (!email || !password) {
+        showError('Пожалуйста, заполните все поля.');
         return;
     }
 
-    if (!validatePassword(password)) {
-        passwordError.textContent = "Пароль должен быть не менее 8 символов и содержать цифры и буквы.";
-        passwordError.style.display = "block";
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        confirmPasswordError.textContent = "Пароли не совпадают.";
-        confirmPasswordError.style.display = "block";
-        return;
-    }
-
-    const savedCode = localStorage.getItem('confirmationCode');
-    if (confirmationCode !== savedCode) {
-        confirmationCodeError.textContent = "Неверный код подтверждения.";
-        confirmationCodeError.style.display = "block";
-        return;
-    }
-
-    const data = { firstName, lastName, email, password, position };
-    console.log("Данные для регистрации:", data);
+    const data = { email, password };
+    console.log("Данные для входа:", data);  // Логируем данные
 
     if (Telegram.WebApp && Telegram.WebApp.sendData) {
         Telegram.WebApp.sendData(JSON.stringify(data));
@@ -125,6 +87,24 @@ function register() {
     Telegram.WebApp.close();
 }
 
+
+// Регистрация
+function register() {
+    const email = document.getElementById('email').value;
+
+    const confirmationCode = document.getElementById('confirmationCode').value;
+    // Проверка кода подтверждения
+    if (confirmationCode !== document.getElementById('confirmationCode').value) {
+        alert("Неверный код подтверждения.");
+        return;
+    }
+
+    // Все проверки пройдены, отправляем данные
+    const data = { email };
+    console.log("Данные для регистрации:", data);
+
+    alert("Регистрация успешна!");
+}
 // Заглушка для "Забыли пароль"
 function showRecovery() {
     alert("Сервис временно недоступен. Попробуйте позже.");
