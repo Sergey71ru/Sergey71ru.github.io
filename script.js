@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 emailjs.init('LBRlpbKBcDeugYBIC');
+Template_ID_recovery = "template_vbiyu3l";
+Template_ID_register = "template_uclulfi";
+Service_ID = "service_5ufba1i";
+
 
 // Валидация почты
 function validateEmail(email) {
@@ -35,7 +39,7 @@ async function sendConfirmationCode() {
     const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
 
     try {
-        const response = await emailjs.send('service_5ufba1i', 'template_uclulfi', {
+        const response = await emailjs.send(Service_ID, Template_ID_register, {
             to_email: email,
             code: code,
         });
@@ -162,7 +166,7 @@ async function sendRecoveryCode() {
     const code = Math.floor(100000 + Math.random() * 900000); // Генерация 6-значного кода
 
     try {
-        const response = await emailjs.send('service_5ufba1i', 'template_uclulfi', {
+        const response = await emailjs.send(Service_ID, Template_ID_recovery, {
             to_email: email,
             code: code,
         });
