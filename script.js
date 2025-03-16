@@ -115,7 +115,7 @@ function register() {
 
     // Проверка валидности почты
     if (!validateEmail(email)) {
-        showError('Некорректная почта. Используйте Gmail, Yandex или Mail.ru.');
+        showError('Некорректная почта. Пожалуйста воспользуйтесь другим доменом');
         return;
     }
 
@@ -159,7 +159,7 @@ async function sendRecoveryCode() {
     const emailError = document.getElementById('emailError');
 
     if (!validateEmail(email)) {
-        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.textContent = "Некорректная почта. Пожалуйста воспользуйтесь другим доменом";
         emailError.style.display = "block";
         return;
     }
@@ -203,7 +203,7 @@ async function saveNewPassword() {
 
     // Проверка валидности почты
     if (!validateEmail(email)) {
-        showError('Некорректная почта. Используйте Gmail, Yandex или Mail.ru.');
+        showError('Некорректная почта. Пожалуйста воспользуйтесь другим доменом');
         return;
     }
 
