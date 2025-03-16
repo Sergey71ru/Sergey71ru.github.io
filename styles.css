@@ -71,7 +71,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Анимация для кнопок */
 .animated-button {
     background-color: #007bff;
     color: white;
@@ -83,10 +82,10 @@ a:hover {
 }
 
 .animated-button:hover {
-    background-color: #0056b3;  /* Цвет при наведении */
-    transform: scale(1.05);  /* Увеличение кнопки при наведении */
+    background-color: #0056b3; 
+    transform: scale(1.05); 
 }
 
 .animated-button:active {
-    transform: scale(0.95);  /* Уменьшение кнопки при нажатии */
+    transform: scale(0.95); 
 }
