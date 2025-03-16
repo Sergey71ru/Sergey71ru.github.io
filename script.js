@@ -15,7 +15,8 @@ Service_ID = "service_5ufba1i";
 
 // Валидация почты
 function validateEmail(email) {
-    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru)$/;
+    email = email.trim();
+    const regex = /^[^\s@]+@(gmail\.com|yandex\.ru|mail\.ru|yahoo\.com|outlook\.com|hotmail\.com|protonmail\.com|icloud\.com|aol\.com|zoho\.com|yandex\.com|rambler\.ru|vk\.com|bk\.ru)$/i;
     return regex.test(email);
 }
 
@@ -31,7 +32,7 @@ async function sendConfirmationCode() {
     const emailError = document.getElementById('emailError');
 
     if (!validateEmail(email)) {
-        emailError.textContent = "Некорректная почта. Используйте Gmail, Yandex или Mail.ru.";
+        emailError.textContent = "Некорректная почта. Пожалуйста воспользуйтесь другим доменом";
         emailError.style.display = "block";
         return;
     }
